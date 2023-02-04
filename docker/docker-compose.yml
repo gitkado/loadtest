@@ -9,5 +9,14 @@ services:
     tty: true
     ports:
       - "80:80"
-    command:
-      - /start-reload.sh
+    command: /start-reload.sh
+  locust:
+    image: locustio/locust:2.14.2
+    volumes:
+      - ../locust/src:/mnt/locust
+      - ../locust/report:/home/locust
+    ports:
+      - "8089:8089"
+    command: -f /mnt/locust/main.py --headless --csv report --users 2 --spawn-rate 10 -t 10s
+    depends_on:
+      - api-server
