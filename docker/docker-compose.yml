@@ -1,0 +1,13 @@
+version: '3'
+services:
+  api-server:
+    container_name: api-server
+    build: ../src
+    volumes:
+      - ../src:/app
+    image: api-server
+    tty: true
+    ports:
+      - "80:80"
+    command:
+      - /start-reload.sh
