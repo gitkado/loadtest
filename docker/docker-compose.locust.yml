@@ -1,0 +1,20 @@
+version: '3'
+services:
+  api-server:
+    container_name: api-server
+    build: ../src
+    volumes:
+      - ../src:/app
+    image: api-server
+    tty: true
+    ports:
+      - "80:80"
+    command: /start-reload.sh
+  locust:
+    image: locustio/locust:2.14.2
+    volumes:
+      - ../locust/src:/mnt/locust
+      - ../locust/report:/home/locust
+    command: -f /mnt/locust/main.py --headless --csv report --users 2 --spawn-rate 10 -t 10s --csv-full-history
+    depends_on:
+      - api-server
